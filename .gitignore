@@ -1,1 +1,4 @@
-*.csv
+sample_submission.csv
+train.csv
+test.csv
+cat-in-the-dat.zip
