@@ -75,18 +75,15 @@ function randomize_index(index::Array{Int64, 1}, kfold = 10, response::Array{Int
         for u in uresp
             # TODO Need a start index in for u in uresp, otherwise the resulting split may be very uneven
             # Dividing by each unique element in response
-            leastind  = findmin(currsizes)[2] # Next array to concatenate
+            leastsigind              = findmin(currsizes)[2]
             randsubindex          = randind[randresp .== u]
             subslice, classsizes  = slice_index(randsubindex, kfold)
-            println(leastind)
-            for i in leastind:(leastind+kfold)
-                key            = (i % 10 == 0) ? 10 : (i % 10)
-                indexsets[key] = vcat(indexsets[key], subslice[key])
+            for i in 0:(kfold-1) #leastind:(leastind+kfold)
+                key = ((i+leastsigind) % kfold == 0) ? kfold : ((i+leastsigind) % kfold)
+                indexsets[key] = vcat(indexsets[key], subslice[i+1])
+                currsizes[key] += classsizes[i+1]
             end
-            println(indexsets)
-
-            # Updating classsizes and leastind
-            currsizes += classsizes
+            println("Sizes of each class currently is $(currsizes)")
         end
     end
 
